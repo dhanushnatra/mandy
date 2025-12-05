@@ -1,0 +1,406 @@
+{
+    "suppliers": [
+        {
+            "supplier_id": "sup001",
+            "name": "alpha metals ltd",
+            "location": "mumbai",
+            "material_supplied": "steel",
+            "monthly_volume": 2500,
+            "rating": 4.5
+        },
+        {
+            "supplier_id": "sup002",
+            "name": "polychem industries",
+            "location": "chennai",
+            "material_supplied": "polymer",
+            "monthly_volume": 1800,
+            "rating": 4.0
+        },
+        {
+            "supplier_id": "sup003",
+            "name": "copperworks india",
+            "location": "delhi",
+            "material_supplied": "copper",
+            "monthly_volume": 1200,
+            "rating": 4.7
+        },
+        {
+            "supplier_id": "sup004",
+            "name": "ultra alloy traders",
+            "location": "pune",
+            "material_supplied": "aluminium",
+            "monthly_volume": 3000,
+            "rating": 4.3
+        },
+        {
+            "supplier_id": "sup005",
+            "name": "carbontech pvt ltd",
+            "location": "hyderabad",
+            "material_supplied": "carbon fiber",
+            "monthly_volume": 800,
+            "rating": 4.1
+        },
+        {
+            "supplier_id": "sup006",
+            "name": "rubberflex corp",
+            "location": "kolkata",
+            "material_supplied": "rubber",
+            "monthly_volume": 1500,
+            "rating": 4.2
+        },
+        {
+            "supplier_id": "sup007",
+            "name": "glassworks india",
+            "location": "surat",
+            "material_supplied": "glass sheets",
+            "monthly_volume": 1000,
+            "rating": 3.9
+        },
+        {
+            "supplier_id": "sup008",
+            "name": "steelmax co",
+            "location": "bengaluru",
+            "material_supplied": "steel",
+            "monthly_volume": 2200,
+            "rating": 4.6
+        },
+        {
+            "supplier_id": "sup009",
+            "name": "megaplast polymers",
+            "location": "noida",
+            "material_supplied": "polymer",
+            "monthly_volume": 2100,
+            "rating": 4.4
+        },
+        {
+            "supplier_id": "sup010",
+            "name": "metaltrade international",
+            "location": "ahmedabad",
+            "material_supplied": "copper",
+            "monthly_volume": 1600,
+            "rating": 4.3
+        }
+    ],
+
+    "raw_materials": [
+        {
+            "material_id": "rm001",
+            "name": "steel",
+            "unit": "kg",
+            "stock_quantity": 5600,
+            "reorder_level": 2000,
+            "supplier_id": "sup001"
+        },
+        {
+            "material_id": "rm002",
+            "name": "polymer",
+            "unit": "kg",
+            "stock_quantity": 4200,
+            "reorder_level": 1500,
+            "supplier_id": "sup002"
+        },
+        {
+            "material_id": "rm003",
+            "name": "copper",
+            "unit": "kg",
+            "stock_quantity": 2500,
+            "reorder_level": 1000,
+            "supplier_id": "sup003"
+        },
+        {
+            "material_id": "rm004",
+            "name": "aluminium",
+            "unit": "kg",
+            "stock_quantity": 6700,
+            "reorder_level": 2500,
+            "supplier_id": "sup004"
+        },
+        {
+            "material_id": "rm005",
+            "name": "carbon fiber",
+            "unit": "kg",
+            "stock_quantity": 900,
+            "reorder_level": 500,
+            "supplier_id": "sup005"
+        },
+        {
+            "material_id": "rm006",
+            "name": "rubber",
+            "unit": "kg",
+            "stock_quantity": 3000,
+            "reorder_level": 1200,
+            "supplier_id": "sup006"
+        },
+        {
+            "material_id": "rm007",
+            "name": "glass sheets",
+            "unit": "pieces",
+            "stock_quantity": 1500,
+            "reorder_level": 600,
+            "supplier_id": "sup007"
+        },
+        {
+            "material_id": "rm008",
+            "name": "steel (secondary)",
+            "unit": "kg",
+            "stock_quantity": 2900,
+            "reorder_level": 1000,
+            "supplier_id": "sup008"
+        },
+        {
+            "material_id": "rm009",
+            "name": "polymer (high density)",
+            "unit": "kg",
+            "stock_quantity": 3100,
+            "reorder_level": 1500,
+            "supplier_id": "sup009"
+        },
+        {
+            "material_id": "rm010",
+            "name": "copper extra-grade",
+            "unit": "kg",
+            "stock_quantity": 2100,
+            "reorder_level": 800,
+            "supplier_id": "sup010"
+        }
+    ],
+
+    "purchase_orders": [
+        {
+            "po_id": "po001",
+            "supplier_id": "sup001",
+            "material_id": "rm001",
+            "quantity": 1500,
+            "date": "2025-01-10",
+            "status": "delivered"
+        },
+        {
+            "po_id": "po002",
+            "supplier_id": "sup002",
+            "material_id": "rm002",
+            "quantity": 900,
+            "date": "2025-01-12",
+            "status": "pending"
+        },
+        {
+            "po_id": "po003",
+            "supplier_id": "sup003",
+            "material_id": "rm003",
+            "quantity": 700,
+            "date": "2025-01-11",
+            "status": "delivered"
+        },
+        {
+            "po_id": "po004",
+            "supplier_id": "sup004",
+            "material_id": "rm004",
+            "quantity": 1800,
+            "date": "2025-01-09",
+            "status": "delivered"
+        },
+        {
+            "po_id": "po005",
+            "supplier_id": "sup005",
+            "material_id": "rm005",
+            "quantity": 400,
+            "date": "2025-01-14",
+            "status": "pending"
+        },
+        {
+            "po_id": "po006",
+            "supplier_id": "sup006",
+            "material_id": "rm006",
+            "quantity": 1000,
+            "date": "2025-01-08",
+            "status": "delivered"
+        },
+        {
+            "po_id": "po007",
+            "supplier_id": "sup007",
+            "material_id": "rm007",
+            "quantity": 600,
+            "date": "2025-01-15",
+            "status": "pending"
+        },
+        {
+            "po_id": "po008",
+            "supplier_id": "sup008",
+            "material_id": "rm008",
+            "quantity": 1200,
+            "date": "2025-01-13",
+            "status": "delivered"
+        },
+        {
+            "po_id": "po009",
+            "supplier_id": "sup009",
+            "material_id": "rm009",
+            "quantity": 1100,
+            "date": "2025-01-10",
+            "status": "delivered"
+        },
+        {
+            "po_id": "po010",
+            "supplier_id": "sup010",
+            "material_id": "rm010",
+            "quantity": 900,
+            "date": "2025-01-11",
+            "status": "pending"
+        }
+    ],
+
+    "production_batches": [
+        {
+            "batch_id": "b001",
+            "product": "engine block",
+            "material_used": ["rm001", "rm003"],
+            "quantity_produced": 300,
+            "date": "2025-01-10",
+            "shift": "morning"
+        },
+        {
+            "batch_id": "b002",
+            "product": "plastic frame",
+            "material_used": ["rm002"],
+            "quantity_produced": 500,
+            "date": "2025-01-10",
+            "shift": "evening"
+        },
+        {
+            "batch_id": "b003",
+            "product": "wire coil",
+            "material_used": ["rm003"],
+            "quantity_produced": 200,
+            "date": "2025-01-11",
+            "shift": "night"
+        },
+        {
+            "batch_id": "b004",
+            "product": "chassis",
+            "material_used": ["rm001", "rm004"],
+            "quantity_produced": 150,
+            "date": "2025-01-11",
+            "shift": "morning"
+        },
+        {
+            "batch_id": "b005",
+            "product": "carbon panel",
+            "material_used": ["rm005"],
+            "quantity_produced": 80,
+            "date": "2025-01-12",
+            "shift": "evening"
+        },
+        {
+            "batch_id": "b006",
+            "product": "rubber pad",
+            "material_used": ["rm006"],
+            "quantity_produced": 600,
+            "date": "2025-01-13",
+            "shift": "morning"
+        },
+        {
+            "batch_id": "b007",
+            "product": "glass screen",
+            "material_used": ["rm007"],
+            "quantity_produced": 400,
+            "date": "2025-01-13",
+            "shift": "night"
+        },
+        {
+            "batch_id": "b008",
+            "product": "steel beam",
+            "material_used": ["rm008"],
+            "quantity_produced": 350,
+            "date": "2025-01-14",
+            "shift": "evening"
+        },
+        {
+            "batch_id": "b009",
+            "product": "polymer housing",
+            "material_used": ["rm009"],
+            "quantity_produced": 450,
+            "date": "2025-01-14",
+            "shift": "morning"
+        },
+        {
+            "batch_id": "b010",
+            "product": "copper wiring kit",
+            "material_used": ["rm010"],
+            "quantity_produced": 250,
+            "date": "2025-01-15",
+            "shift": "evening"
+        }
+    ],
+
+    "inventory": [
+        {
+            "inventory_id": "inv001",
+            "product": "engine block",
+            "quantity_available": 120,
+            "warehouse": "w1",
+            "last_updated": "2025-01-10"
+        },
+        {
+            "inventory_id": "inv002",
+            "product": "plastic frame",
+            "quantity_available": 340,
+            "warehouse": "w2",
+            "last_updated": "2025-01-11"
+        },
+        {
+            "inventory_id": "inv003",
+            "product": "wire coil",
+            "quantity_available": 150,
+            "warehouse": "w1",
+            "last_updated": "2025-01-11"
+        },
+        {
+            "inventory_id": "inv004",
+            "product": "chassis",
+            "quantity_available": 80,
+            "warehouse": "w3",
+            "last_updated": "2025-01-11"
+        },
+        {
+            "inventory_id": "inv005",
+            "product": "carbon panel",
+            "quantity_available": 60,
+            "warehouse": "w2",
+            "last_updated": "2025-01-12"
+        },
+        {
+            "inventory_id": "inv006",
+            "product": "rubber pad",
+            "quantity_available": 400,
+            "warehouse": "w1",
+            "last_updated": "2025-01-13"
+        },
+        {
+            "inventory_id": "inv007",
+            "product": "glass screen",
+            "quantity_available": 220,
+            "warehouse": "w4",
+            "last_updated": "2025-01-13"
+        },
+        {
+            "inventory_id": "inv008",
+            "product": "steel beam",
+            "quantity_available": 180,
+            "warehouse": "w3",
+            "last_updated": "2025-01-14"
+        },
+        {
+            "inventory_id": "inv009",
+            "product": "polymer housing",
+            "quantity_available": 290,
+            "warehouse": "w2",
+            "last_updated": "2025-01-14"
+        },
+        {
+            "inventory_id": "inv010",
+            "product": "copper wiring kit",
+            "quantity_available": 140,
+            "warehouse": "w4",
+            "last_updated": "2025-01-15"
+        }
+    ]
+}
