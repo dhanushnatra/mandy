@@ -1,6 +1,14 @@
 from typing import TypedDict
 from enum import Enum
+from pydantic import BaseModel
 
+class UserMessage(BaseModel):
+    role :str = "human"
+    content: str
+
+class AIResponse(BaseModel):
+    role :str = "assistant"
+    content: str
 
 class Shift(Enum):
     MORNING = "morning"

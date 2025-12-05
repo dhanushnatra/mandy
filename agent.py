@@ -1,25 +1,37 @@
-from langchain.chat_models import init_chat_model
+from langchain_ollama import ChatOllama
 from langchain.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
 from typing import TypedDict
-
 from tools import all_tools
 
-# Base model + binding tools
-chat_model = init_chat_model("llama3.2", model_provider="ollama").bind_tools(all_tools)
+
+# Base model
+base_model = ChatOllama(model="llama3.2", temperature=0.3)
+tool_model = base_model.bind_tools(all_tools)
 
 
+# ------------------
+# STATE
+# ------------------
 class ChatState(TypedDict):
-    messages: list
-
-def llm_response(state: ChatState) -> dict:
-    response = chat_model.invoke(state["messages"])
-    return {"messages": state["messages"] + [response]}
+    messages: list[SystemMessage | HumanMessage | AIMessage | ToolMessage |dict]
 
 
+# ------------------
+# LLM NODE
+# ------------------
+def llm_node(state: ChatState) -> dict:
+    messages = state["messages"]
+    print("LLM INPUT →", messages)
+
+    response = tool_model.invoke(messages)
+    return {"messages": messages + [response]}
 
 
+# ------------------
+# ROUTER
+# ------------------
 def router(state: ChatState):
     last = state["messages"][-1]
 
@@ -27,75 +39,99 @@ def router(state: ChatState):
         return "tool"
 
     if isinstance(last, ToolMessage):
-        return "llm_answer"
+        return "final"
+    
+    if isinstance(last,dict):
+        return "tool" if getattr(last,"tools_calls",False) else "final"
 
-    return "end"
+    return "final"
 
 
-# def summary(state: ChatState) :
-#     messages = state["messages"] + [
-#         SystemMessage(content="Provide a concise summary based on the messages.")
-#     ]
-#     response = chat_model.invoke(messages)
-#     return {"messages": messages + [response]}
 
+# ------------------
+# BUILD AGENT GRAPH
+# ------------------
+
+Tool_Interface = ToolNode(all_tools)
+
+
+def tools_node(state):
+    result = Tool_Interface.invoke(state)
+    return {
+        'messages': state['messages'] + result['messages']
+    }
 
 def create_agent():
     graph = StateGraph(ChatState)
+    
+    graph.add_node("llm", llm_node)
+    graph.add_node("tool", tools_node)
 
-    tool_node = ToolNode(all_tools)
-
-    graph.add_node("llm_answer", llm_response)
-    graph.add_node("tool", tool_node)
-
-    graph.add_edge(START, "llm_answer")
-    graph.add_edge("tool", "llm_answer")
+    graph.add_edge(START, "llm")
+    graph.add_edge("tool", "llm")
 
     graph.add_conditional_edges(
-        "llm_answer",
+        "llm",
         router,
         {
             "tool": "tool",
-            "end": END
+            "final": END,
         }
     )
 
     return graph.compile()
 
 
-
-system_msg = SystemMessage(content="""You are Mandy, a tool-dependent manufacturing assistant.  
-
-You MUST use tools whenever the answer requires company data.  
-You MUST NOT fabricate or guess details.
+# ------------------
+# SYSTEM MESSAGE
+# ------------------
+system_msg = SystemMessage(
+    content="""
+You are Mandy, a tool-dependent manufacturing assistant.
 
 RULES:
-1. If the user asks for any operational fact (counts, stock, supplier info, materials, batches, purchase orders), call a tool.
-2. If the question references an ID → use the matching get_*_by_id tool.
-3. If it requires filtering (date, shift, product) → use the corresponding specialized tool.
-4. If multiple tools are needed, call them step-by-step.
-5. If a question cannot be answered using given tools, ask the user for missing information.
-6. you can get_all_* to explore data before filtering.
-7. Always provide answers based on the tool responses only.
+1. Use tools for ANY factual company data.
+2. Never guess values.
+3. If user asks for an ID → use get_*_by_id tool.
+4. If filtering is needed → use appropriate tool.
+5. Use get_all_* tools if unsure.
+6. Only answer based on tool results.
+7. After tool execution, give a clean natural-language answer.
+8. If no data found, respond with "No data found."
 
-IMPORTANT: Follow these guidelines strictly to ensure accurate and reliable responses.
+STYLE:
+- concise
+- factual
+- no hallucinations
+"""
+)
 
-RESPONSE STYLE:
-- Concise  
-- Accurate  
-- Do not expose internal tool names  
-- Do not invent values  
 
-""")
+agent = create_agent()
 
-agent = create_agent()  
 
-def ask_agent(question: str) -> str:
-    initial_state: ChatState = {
+# ------------------
+# ASK FUNCTION
+# ------------------
+def ask_agent(conversation:list[HumanMessage | AIMessage]):
+    state:ChatState = {
         "messages": [
             system_msg,
-            HumanMessage(content=question)
+            *conversation
         ]
     }
-    final_state = agent.invoke(initial_state)
-    return final_state["messages"][-1].content
+    try:
+        final = agent.invoke(state)
+        return final["messages"][-1].content
+    except Exception as e:
+        return f"Error: {e}"
+
+
+
+if __name__ == "__main__":
+    query = "How many suppliers are there?"
+    try:
+        answer = ask_agent([HumanMessage(content=query)])
+        print("Agent Answer →", answer)
+    except Exception as e:
+        print(f"Error: {e}")

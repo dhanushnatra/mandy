@@ -31,7 +31,7 @@ def len_of_field(field: Field):
         case _:
             print("Invalid field:", field)
             return None
-    return ""f"Total {field.value.replace('_', ' ').title()}s: {count}"
+    return f"Total {field.value.replace('_', ' ').title()}s: {count} are present in the database."
 
 
 @tool
@@ -66,7 +66,7 @@ def get_all_raw_materials():
         )
     """
     print("Retrieving all raw materials")
-    return raw_materials
+    return f"There are total {len(raw_materials)} raw materials in the database.{"".join([str(material)+"," for material in raw_materials])}", 
 @tool
 def get_all_production_batches():
     """Retrieve all production batches with batch_id, product_id, quantity, start_date, end_date, and status.
@@ -83,7 +83,7 @@ def get_all_production_batches():
         
     """ 
     print("Retrieving all production batches")
-    return production_batches
+    return f"There are total {len(production_batches)} production batches in the database.{"".join([str(batch)+"," for batch in production_batches])}", 
 @tool
 def get_all_inventory_items():
     """Retrieve all inventory items with inventory_id, name, quantity, location, and status.
@@ -99,7 +99,7 @@ def get_all_inventory_items():
         
     """
     print("Retrieving all inventory items")
-    return inventory_items
+    return f"There are total {len(inventory_items)} inventory items in the database.{"".join([str(item)+"," for item in inventory_items])}", 
 
 @tool
 def get_all_purchase_orders():
@@ -116,7 +116,7 @@ def get_all_purchase_orders():
         )
     """
     print("Retrieving all purchase orders")
-    return purchase_orders
+    return f"There are total {len(purchase_orders)} purchase orders in the database.{"".join([str(order)+"," for order in purchase_orders])}", 
 
 def _get_inventory_item_by_id(inventory_id: str):
     """
@@ -392,7 +392,7 @@ def get_production_batches_by_shift(shift: str):
     Returns:
         list[dict]: A list of production batches for the specified shift.
     """
-    batches_in_shift = [batch for batch in production_batches if batch["shift"].value == shift.lower()]
+    batches_in_shift = [batch for batch in production_batches if batch["shift"] == shift.lower()]
     print(f"Retrieving all production batches for {shift} shift")
     return batches_in_shift
 
@@ -452,6 +452,66 @@ def get_all_suppliers_locations():
     return list(locations)
 
 
+@tool
+def get_all_batches_of_today():
+    """Retrieve all production batches created today.
+    Returns:
+        list[dict]: A list of all production batches created today.
+    """
+    from datetime import datetime
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    todays_batches = [batch for batch in production_batches if batch["date"] == today_str]
+    print("Retrieving all production batches created today")
+    return todays_batches
+
+@tool
+def get_all_low_stock_materials(threshold: int):
+    """Retrieve all raw materials with stock quantity below a specified threshold.
+    Args:
+        threshold (int): The stock quantity threshold.
+    Returns:
+        list[dict]: A list of raw materials with stock quantity below the specified threshold.
+    """
+    low_stock_materials = [material for material in raw_materials if material["stock_quantity"] < threshold]
+    print(f"Retrieving all raw materials with stock quantity below {threshold}")
+    return low_stock_materials        
+
+@tool
+def get_batches_this_month():
+    """Retrieve all production batches created in the current month.
+    Returns:
+        list[dict]: A list of all production batches created in the current month.
+    """
+    from datetime import datetime
+    now = datetime.now()
+    month_str = now.strftime("%Y-%m")
+    monthly_batches = [batch for batch in production_batches if batch["date"].startswith(month_str)]
+    print("Retrieving all production batches created this month")
+    return monthly_batches
+
+@tool
+def get_product_by_warehouse(warehouse_name: str):
+    """Retrieve all products stored in a specific warehouse.
+    Args:
+        warehouse_name (str): The name of the warehouse.
+    Returns:
+        list[dict]: A list of inventory items stored in the specified warehouse.
+    """
+    items_in_warehouse = [item for item in inventory_items if item["warehouse"].lower() == warehouse_name.lower()]
+    print(f"Retrieving all products in warehouse: {warehouse_name}")
+    return items_in_warehouse
+
+@tool
+def get_sort_suppliers_by_monthly_volume():
+    """Retrieve all suppliers sorted by their monthly volume in descending order.
+    Returns:
+        list[dict]: A list of suppliers sorted by monthly volume.
+    """
+    sorted_suppliers = sorted(suppliers, key=lambda x: x["monthly_volume"], reverse=True)
+    print("Retrieving all suppliers sorted by monthly volume")
+    return sorted_suppliers
+
+
 
 all_tools:list[BaseTool] = [
     len_of_field,
@@ -480,4 +540,9 @@ all_tools:list[BaseTool] = [
     get_all_products_in_inventory,
     get_all_products_in_production_batches,
     get_all_suppliers_locations,
+    get_all_batches_of_today,
+    get_all_low_stock_materials,
+    get_batches_this_month,
+    get_product_by_warehouse,
+    get_sort_suppliers_by_monthly_volume,
 ]
