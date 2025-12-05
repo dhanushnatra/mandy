@@ -15,13 +15,13 @@ tool_model = base_model.bind_tools(all_tools)
 # STATE
 # ------------------
 class ChatState(TypedDict):
-    messages: list[SystemMessage | HumanMessage | AIMessage | ToolMessage |dict]
+    messages: list[dict]
 
 
 # ------------------
 # LLM NODE
 # ------------------
-def llm_node(state: ChatState) -> dict:
+def llm_node(state: ChatState):
     messages = state["messages"]
     print("LLM INPUT →", messages)
 
@@ -85,8 +85,7 @@ def create_agent():
 # ------------------
 # SYSTEM MESSAGE
 # ------------------
-system_msg = SystemMessage(
-    content="""
+system_msg = {"role": "system", "content":"""
 You are Mandy, a tool-dependent manufacturing assistant.
 
 RULES:
@@ -104,8 +103,7 @@ STYLE:
 - factual
 - no hallucinations
 """
-)
-
+}
 
 agent = create_agent()
 
@@ -113,7 +111,7 @@ agent = create_agent()
 # ------------------
 # ASK FUNCTION
 # ------------------
-def ask_agent(conversation:list[HumanMessage | AIMessage]):
+def ask_agent(conversation:list[dict]):
     state:ChatState = {
         "messages": [
             system_msg,
@@ -131,7 +129,7 @@ def ask_agent(conversation:list[HumanMessage | AIMessage]):
 if __name__ == "__main__":
     query = "How many suppliers are there?"
     try:
-        answer = ask_agent([HumanMessage(content=query)])
+        answer = ask_agent([{"role": "user", "content": query}])
         print("Agent Answer →", answer)
     except Exception as e:
         print(f"Error: {e}")

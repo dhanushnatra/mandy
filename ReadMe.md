@@ -43,3 +43,7 @@
     ```
     streamlit run main.py
     ```
+
+## Usage
+
+-   Go to [here](https://127.0.0.1:8501) to start conversation with mandy
